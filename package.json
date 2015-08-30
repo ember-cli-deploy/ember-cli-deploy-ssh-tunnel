@@ -11,7 +11,7 @@
     "build": "ember build",
     "test": "node tests/runner.js"
   },
-  "repository": "",
+  "repository": "https://github.com/ghedamat/ember-cli-deploy-ssh-tunnel",
   "engines": {
     "node": ">= 0.10.0"
   },
