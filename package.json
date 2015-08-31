@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-deploy-ssh-tunnel",
-  "version": "0.0.1",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.2",
+  "description": "Open an ssh-tunnel during your ember-cli deploy",
   "directories": {
     "doc": "doc",
     "test": "tests"
