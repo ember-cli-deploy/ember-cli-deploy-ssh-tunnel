@@ -32,7 +32,7 @@ module.exports = {
 
       requiredConfig: ['host', 'username'],
 
-      willDeploy: function(/* context */) {
+      setup: function(/* context */) {
         var srcPort = this.readConfig('srcPort');
 
         if (srcPort > MAX_PORT_NUMBER || srcPort < MIN_PORT_NUMBER) {
@@ -69,7 +69,7 @@ module.exports = {
         });
       },
 
-      didDeploy: function(context) {
+      teardown: function(context) {
         context.tunnel.handler.close();
       }
     });

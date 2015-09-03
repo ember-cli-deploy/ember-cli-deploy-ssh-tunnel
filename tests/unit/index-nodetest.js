@@ -34,8 +34,8 @@ describe('ssh-tunnel plugin', function() {
 
     assert.equal(typeof result.defaultConfig, 'object');
     assert.equal(typeof result.requiredConfig, 'object');
-    assert.equal(typeof result.willDeploy, 'function');
-    assert.equal(typeof result.didDeploy, 'function');
+    assert.equal(typeof result.setup, 'function');
+    assert.equal(typeof result.teardown, 'function');
   });
 
   describe('configure hook', function() {
@@ -131,7 +131,7 @@ previous.push(current);
     });
   });
 
-  describe('willDeploy hook', function() {
+  describe('setup hook', function() {
     var plugin;
     var context;
 
@@ -163,7 +163,7 @@ previous.push(current);
     });
 
     it('returns the updated context if tunnel is successful', function(done) {
-      assert.isFulfilled(plugin.willDeploy(context)).then(function(result) {
+      assert.isFulfilled(plugin.setup(context)).then(function(result) {
         assert.isDefined(result.tunnel.handler);
         assert.isDefined(result.tunnel.srcPort);
         done();
@@ -173,7 +173,7 @@ previous.push(current);
     });
   });
 
-  describe('didDeploy hook', function() {
+  describe('teardown hook', function() {
     var plugin;
     var context;
 
@@ -202,7 +202,7 @@ previous.push(current);
         }
       };
 
-      var result = plugin.didDeploy(context);
+      var result = plugin.teardown(context);
     });
   });
 });
