@@ -80,6 +80,12 @@ The port to forward from the server
 
 *Default:* `6379`
 
+### dstHost
+
+The host to forward to on the destination server.
+
+*Default:* `localhost`
+
 ### srcPort
 
 The local port for the forwarding
