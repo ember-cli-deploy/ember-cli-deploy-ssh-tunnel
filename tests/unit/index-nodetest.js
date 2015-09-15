@@ -108,7 +108,7 @@ previous.push(current);
 
           return previous;
         }, []);
-        assert.equal(messages.length, 4);
+        assert.equal(messages.length, 5);
       });
 
       it('adds default config to the config object', function() {
@@ -124,6 +124,7 @@ previous.push(current);
         plugin.beforeHook(context);
         plugin.configure(context);
         assert.isDefined(config['ssh-tunnel'].dstPort);
+        assert.isDefined(config['ssh-tunnel'].dstHost);
         assert.isDefined(config['ssh-tunnel'].srcPort);
         assert.isDefined(config['ssh-tunnel'].tunnelClient);
         assert.isDefined(config['ssh-tunnel'].privateKeyPath);
