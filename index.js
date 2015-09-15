@@ -19,6 +19,7 @@ module.exports = {
       name: options.name,
       defaultConfig: {
           dstPort: 6379,
+          dstHost: 'localhost',
           srcPort: function() {
             var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
             return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
@@ -42,6 +43,7 @@ module.exports = {
         var sshConfig = {
           host: this.readConfig('host'),
           dstPort: this.readConfig('dstPort'),
+          dstHost: this.readConfig('dstHost'),
           username: this.readConfig('username'),
           localPort: srcPort,
           privateKey: this.readConfig('privateKeyPath')
