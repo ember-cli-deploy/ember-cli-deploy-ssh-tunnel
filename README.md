@@ -4,9 +4,7 @@
 
 [![Circle CI](https://circleci.com/gh/ghedamat/ember-cli-deploy-ssh-tunnel/tree/master.svg?style=shield)](https://circleci.com/gh/ghedamat/ember-cli-deploy-ssh-tunnel/tree/master)
 
-<hr/>
-**WARNING: This plugin is only compatible with ember-cli-deploy versions >= 0.5.0**
-<hr/>
+[![](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-ssh-tunnel.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
 
 This plugins opens an ssh tunnel forwarding a port to the host you specify to one of your local ports.
 
