@@ -2,8 +2,8 @@
 
 var Promise = require('ember-cli/lib/ext/promise');
 var assert  = require('ember-cli/tests/helpers/assert');
-var fs  = require('fs');
-var path  = require('path');
+var fs      = require('fs');
+var path    = require('path');
 
 describe('ssh-tunnel plugin', function() {
   var subject, mockUi;
@@ -15,7 +15,8 @@ describe('ssh-tunnel plugin', function() {
       write: function() { },
       writeLine: function(message) {
         this.messages.push(message);
-      }
+      },
+      verbose: true
     };
   });
 
@@ -60,7 +61,7 @@ describe('ssh-tunnel plugin', function() {
       assert.ok(true); // it didn't throw
     });
 
-    describe('without providing config', function () {
+    describe('without providing config', function() {
       var plugin, context, config;
 
       beforeEach(function() {
@@ -70,7 +71,7 @@ describe('ssh-tunnel plugin', function() {
       });
 
       it('raises about missing required config', function() {
-        config = { };
+        config = {};
         context = {
           ui: mockUi,
           config: config
@@ -81,9 +82,8 @@ describe('ssh-tunnel plugin', function() {
         });
         var messages = mockUi.messages.reduce(function(previous, current) {
           if (/- Missing required config:\s.*/.test(current)) {
-previous.push(current);
+            previous.push(current);
           }
-
           return previous;
         }, []);
         assert.equal(messages.length, 1);
@@ -108,18 +108,19 @@ previous.push(current);
 
           return previous;
         }, []);
-        assert.equal(messages.length, 5);
+        assert.equal(messages.length, 4);
       });
 
       it('adds default config to the config object', function() {
+        config = {
+          'ssh-tunnel': {
+            host: 'example.com',
+            username: 'ghedamat'
+          }
+        }
         context = {
           ui: mockUi,
-          config: {
-            'ssh-tunnel': {
-              host: 'example.com',
-              username: 'ghedamat'
-            }
-          }
+          config: config
         };
         plugin.beforeHook(context);
         plugin.configure(context);
@@ -127,7 +128,53 @@ previous.push(current);
         assert.isDefined(config['ssh-tunnel'].dstHost);
         assert.isDefined(config['ssh-tunnel'].srcPort);
         assert.isDefined(config['ssh-tunnel'].tunnelClient);
+      });
+    });
+
+    describe('with custom authentication provided', function () {
+      var plugin, context, config;
+
+      beforeEach(function() {
+        plugin = subject.createDeployPlugin({
+          name: 'ssh-tunnel'
+        });
+      });
+
+      it('uses a password', function() {
+        config = {
+          'ssh-tunnel': {
+            host: 'example.com',
+            username: 'example',
+            password: 'secret'
+          }
+        }
+        context = {
+          ui: mockUi,
+          config: config
+        }
+        plugin.beforeHook(context);
+        plugin.configure(context);
+        assert.isDefined(config['ssh-tunnel'].password);
+        assert.isUndefined(config['ssh-tunnel'].privateKeyPath);
+      });
+
+      it('uses a key path', function() {
+        config = {
+          'ssh-tunnel': {
+            host: 'example.com',
+            username: 'example',
+            privateKeyPath: '~/.ssh/id_rsa'
+          }
+        }
+        context = {
+          ui: mockUi,
+          config: config
+        }
+        plugin.beforeHook(context);
+        plugin.configure(context);
+        assert.isUndefined(config['ssh-tunnel'].password);
         assert.isDefined(config['ssh-tunnel'].privateKeyPath);
+        assert.equal(config['ssh-tunnel'].privateKeyPath, '~/.ssh/id_rsa');
       });
     });
   });
