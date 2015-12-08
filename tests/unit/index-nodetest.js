@@ -1,9 +1,7 @@
+/*jshint globalstrict: true*/
 'use strict';
 
-var Promise = require('ember-cli/lib/ext/promise');
 var assert  = require('ember-cli/tests/helpers/assert');
-var fs      = require('fs');
-var path    = require('path');
 
 describe('ssh-tunnel plugin', function() {
   var subject, mockUi;
@@ -77,7 +75,7 @@ describe('ssh-tunnel plugin', function() {
           config: config
         };
         plugin.beforeHook(context);
-        assert.throws(function(error){
+        assert.throws(function(){
           plugin.configure(context);
         });
         var messages = mockUi.messages.reduce(function(previous, current) {
@@ -117,7 +115,7 @@ describe('ssh-tunnel plugin', function() {
             host: 'example.com',
             username: 'ghedamat'
           }
-        }
+        };
         context = {
           ui: mockUi,
           config: config
@@ -147,11 +145,11 @@ describe('ssh-tunnel plugin', function() {
             username: 'example',
             password: 'secret'
           }
-        }
+        };
         context = {
           ui: mockUi,
           config: config
-        }
+        };
         plugin.beforeHook(context);
         plugin.configure(context);
         assert.isDefined(config['ssh-tunnel'].password);
@@ -165,11 +163,11 @@ describe('ssh-tunnel plugin', function() {
             username: 'example',
             privateKeyPath: '~/.ssh/id_rsa'
           }
-        }
+        };
         context = {
           ui: mockUi,
           config: config
-        }
+        };
         plugin.beforeHook(context);
         plugin.configure(context);
         assert.isUndefined(config['ssh-tunnel'].password);
@@ -180,8 +178,7 @@ describe('ssh-tunnel plugin', function() {
   });
 
   describe('setup hook', function() {
-    var plugin;
-    var context;
+    var plugin, context;
 
     beforeEach(function() {
       plugin = subject.createDeployPlugin({
@@ -222,8 +219,7 @@ describe('ssh-tunnel plugin', function() {
   });
 
   describe('teardown hook', function() {
-    var plugin;
-    var context;
+    var plugin, context;
 
     beforeEach(function() {
       plugin = subject.createDeployPlugin({
@@ -250,7 +246,7 @@ describe('ssh-tunnel plugin', function() {
         }
       };
 
-      var result = plugin.teardown(context);
+      plugin.teardown(context);
     });
   });
 });
