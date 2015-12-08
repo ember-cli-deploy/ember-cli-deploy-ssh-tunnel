@@ -19,6 +19,7 @@ module.exports = {
       name: options.name,
       defaultConfig: {
           dstPort: 6379,
+          port: 22,
           dstHost: 'localhost',
           srcPort: function() {
             var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
@@ -41,6 +42,7 @@ module.exports = {
 
         var sshConfig = {
           host: this.readConfig('host'),
+          port: this.readConfig('port'),
           dstPort: this.readConfig('dstPort'),
           dstHost: this.readConfig('dstHost'),
           username: this.readConfig('username'),

@@ -90,6 +90,12 @@ The local port for the forwarding.
 
 *Default:* a random port between `49151` and `65535`
 
+### port
+
+The ssh port on the destination server.
+
+*Default:* `22`
+
 ### privateKeyPath
 
 The local path to your ssh private key.
