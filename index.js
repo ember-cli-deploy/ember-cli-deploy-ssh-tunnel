@@ -1,10 +1,10 @@
 /* jshint node: true */
 'use strict';
 
-var Promise    = require('ember-cli/lib/ext/promise');
-var fs         = require('fs');
+var Promise   = require('ember-cli/lib/ext/promise');
+var fs        = require('fs');
 var tunnelSsh = require('tunnel-ssh');
-var untildify  = require('untildify');
+var untildify = require('untildify');
 
 var DeployPluginBase = require('ember-cli-deploy-plugin');
 
@@ -24,7 +24,6 @@ module.exports = {
             var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
             return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
           },
-          privateKeyPath: '~/.ssh/id_rsa',
           tunnelClient: function(context) {
             // if you want to provide your own ssh client to be used instead of one from this plugin
             return context.tunnelClient || tunnelSsh;
@@ -45,18 +44,21 @@ module.exports = {
           dstPort: this.readConfig('dstPort'),
           dstHost: this.readConfig('dstHost'),
           username: this.readConfig('username'),
-          localPort: srcPort,
-          privateKey: this.readConfig('privateKeyPath')
+          localPort: srcPort
         };
 
-        if (sshConfig.privateKey) {
-          sshConfig.privateKey = fs.readFileSync(untildify(sshConfig.privateKey));
-        }
-
+        var password = this.readConfig('password');
+        var privateKey = this.readConfig('privateKeyPath');
         var tunnel = this.readConfig('tunnelClient');
 
-        return new Promise(function (resolve, reject) {
-          var sshTunnel = tunnel(sshConfig, function (error /*, result */) {
+        if (password) {
+          sshConfig.password = password;
+        } else if (privateKey) {
+          sshConfig.privateKey = fs.readFileSync(untildify(privateKey));
+        }
+
+        return new Promise(function(resolve, reject) {
+          var sshTunnel = tunnel(sshConfig, function(error /*, result */) {
             if (error) {
               reject(error);
             } else {

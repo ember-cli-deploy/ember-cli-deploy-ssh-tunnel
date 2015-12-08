@@ -62,19 +62,19 @@ For detailed information on how configuration of plugins works, please refer to 
 
 ### username (`required`)
 
-The user for the ssh connection
+The user for the ssh connection.
 
 *Default:* `undefined`
 
 ### host (`required`)
 
-The server to connect to
+The server to connect to.
 
 *Default:* `undefined`
 
 ### dstPort
 
-The port to forward from the server
+The port to forward from the server.
 
 *Default:* `6379`
 
@@ -86,15 +86,21 @@ The host to forward to on the destination server.
 
 ### srcPort
 
-The local port for the forwarding
+The local port for the forwarding.
 
 *Default:* a random port between `49151` and `65535`
 
 ### privateKeyPath
 
-The local path to your ssh private key
+The local path to your ssh private key.
 
-*Default:* `~/.ssh/id_rsa`
+*Default:* null
+
+### password
+
+Authorization string for the ssh connection.
+
+*Default:* null
 
 ### tunnelClient
 
@@ -102,15 +108,41 @@ The client used to create the ssh tunnel. This allows the user the ability to us
 
 *Default:* the tunnel provided by `tunnel-ssh`
 
+## Authorization
+
+ember-cli-deploy-ssh-tunnel uses the [tunnel-ssh](https://github.com/Finanzchef24-GmbH/tunnel-ssh) module to provide the SSH tunnel. Two options exist to configure tunnel-ssh from ember-cli-deploy-ssh-tunnel: `privateKeyPath` and `password`. By default, we assume you have created a public and private key and added it to ssh-agent as described in the [default GitHub setup](https://help.github.com/articles/generating-ssh-keys/). 
+
+If no authentication information is delivered to tunnel-ssh, it will [default to using ssh-agent](https://github.com/Finanzchef24-GmbH/tunnel-ssh), so it will default to using the default id_rsa keys generated as described in the GitHub article. This includes password-protected SSH keys. If you would like to use a different SSH key, set the `privateKeyPath` option:
+
+```js
+ENV['ssh-tunnel'] = {
+  username: 'yourname',
+  host: 'yourserver',
+  privateKeyPath: '~/.ssh/another_key_rsa'
+};
+```
+
+If you just want to use a password to tunnel, you can specify that as an option (we recommend using environmental variables in an .env file):
+
+```js
+ENV['ssh-tunnel'] = {
+  username: 'yourname',
+  host: 'yourserver',
+  password: process.env.SSH_PASSWORD
+};
+```
+
+NOTE: at this time, this plugin does not support setting a path to `privateKeyPath` to a key that has been encrypted with a password.
+
 ## Running Tests
 
-- `npm test`
-
-[1]: http://ember-cli.github.io/ember-cli-deploy/plugins "Plugin Documentation"
-
+1. `npm install`
+2. `npm test`
 
 ## Thanks to:
 
 @lukemelia and @achambers and the other folks from the ember-cli-deploy project.
 
 @tim-evans for the original implementation in [ember-deploy-redis](https://github.com/LevelbossMike/ember-deploy-redis)
+
+[1]: http://ember-cli.github.io/ember-cli-deploy/plugins "Plugin Documentation"
