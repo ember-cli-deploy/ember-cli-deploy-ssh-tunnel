@@ -26,13 +26,32 @@ To get up and running quickly, do the following:
 $ ember install ember-cli-deploy-ssh-tunnel
 ```
 
-- Place the following configuration into `config/deploy.js`
+- For typical usage with `ember-cli-deploy-redis`, place the following configuration into `config/deploy.js`.
 
 ```javascript
 ENV['ssh-tunnel'] = {
   username: 'yourname',
   host: 'yourserver',
+
+  // A unique port on your local machine to forward to on the remote
+  // server.  This will be set to a random port between 49151 and 65535
+  // by default.
+  // srcPort: <49151 - 65535>,
+
+  // The port that the remote redis server listens on. 6379 is the default value.
+  // dstPort: 6379
 };
+
+ENV.redis.host = 'localhost':
+
+// ember-cli-redis will connect to redis locally on `ENV['ssh-tunnel'].srcPort`.
+// Transmissions on that port will be forwarded over SSH and be received on
+// the remote machine on `ENV['ssh-tunnel'].dstPort`.
+// With `ember-cli-deploy-redis >= 0.1.1` `ENV.redis.port` will default
+// to `ENV['ssh-tunnel'].srcPort` if available. On lower versions
+// you must explicitly set it to match `ENV['ssh-tunnel'].srcPort.
+//
+// ENV.redis.port = 49151;
 ```
 
 - Run the pipeline
