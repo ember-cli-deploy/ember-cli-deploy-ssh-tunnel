@@ -46,7 +46,7 @@
   ],
   "dependencies": {
     "ember-cli-babel": "^5.0.0",
-    "ember-cli-deploy-plugin": "0.2.0",
+    "ember-cli-deploy-plugin": "^0.2.1",
     "tunnel-ssh": "^1.0.1",
     "untildify": "^2.0.0"
   },
