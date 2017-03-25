@@ -1,17 +1,21 @@
 # Change Log
 
-## [0.2.2](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/0.2.2) (2016-02-06)
-[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v0.2.1...0.2.2)
+## [v1.0.0-beta.0](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/v1.0.0-beta.0) (2017-03-25)
+[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v0.2.2...v1.0.0-beta.0)
+
+**Merged pull requests:**
+
+- Upgrade ember-cli and embrace being a node-only ember-cli addon [\#8](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/pull/8) ([lukemelia](https://github.com/lukemelia))
+
+## [v0.2.2](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/v0.2.2) (2016-02-06)
+[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v0.2.1...v0.2.2)
+
+**Merged pull requests:**
 
 - Add more detail in the quickstart guide for setup with ember-cli-deploy-redis [\#5](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/pull/5) ([g-cassie](https://github.com/g-cassie))
-- update ember-cli-deploy plugin (@ghedamat)
 
 ## [v0.2.1](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/v0.2.1) (2015-12-08)
 [Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v0.2.0...v0.2.1)
-
-**Closed issues:**
-
-- Better example in documentation [\#2](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/issues/2)
 
 **Merged pull requests:**
 
