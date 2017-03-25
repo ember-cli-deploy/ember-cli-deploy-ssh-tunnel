@@ -1,8 +1,7 @@
-/* jshint node: true */
 'use strict';
 
-var Promise   = require('ember-cli/lib/ext/promise');
-var fs        = require('fs');
+var RSVP = require('rsvp');
+var fs = require('fs');
 var tunnelSsh = require('tunnel-ssh');
 var untildify = require('untildify');
 
@@ -59,7 +58,7 @@ module.exports = {
           sshConfig.privateKey = fs.readFileSync(untildify(privateKey));
         }
 
-        return new Promise(function(resolve, reject) {
+        return new RSVP.Promise(function(resolve, reject) {
           var sshTunnel = tunnel(sshConfig, function(error /*, result */) {
             if (error) {
               reject(error);

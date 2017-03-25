@@ -1,7 +1,6 @@
-/*jshint globalstrict: true*/
 'use strict';
 
-var assert  = require('ember-cli/tests/helpers/assert');
+var assert = require('../helpers/assert');
 
 describe('ssh-tunnel plugin', function() {
   var subject, mockUi;
