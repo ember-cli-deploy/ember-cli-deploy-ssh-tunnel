@@ -135,7 +135,7 @@ The client used to create the ssh tunnel. This allows the user the ability to us
 
 ## Authorization
 
-ember-cli-deploy-ssh-tunnel uses the [tunnel-ssh](https://github.com/Finanzchef24-GmbH/tunnel-ssh) module to provide the SSH tunnel. Two options exist to configure tunnel-ssh from ember-cli-deploy-ssh-tunnel: `privateKeyPath` and `password`. By default, we assume you have created a public and private key and added it to ssh-agent as described in the [default GitHub setup](https://help.github.com/articles/generating-ssh-keys/). 
+ember-cli-deploy-ssh-tunnel uses the [tunnel-ssh](https://github.com/Finanzchef24-GmbH/tunnel-ssh) module to provide the SSH tunnel. Two options exist to configure tunnel-ssh from ember-cli-deploy-ssh-tunnel: `privateKeyPath` and `password`. By default, we assume you have created a public and private key and added it to ssh-agent as described in the [default GitHub setup](https://help.github.com/articles/generating-ssh-keys/).
 
 If no authentication information is delivered to tunnel-ssh, it will [default to using ssh-agent](https://github.com/Finanzchef24-GmbH/tunnel-ssh), so it will default to using the default id_rsa keys generated as described in the GitHub article. This includes password-protected SSH keys. If you would like to use a different SSH key, set the `privateKeyPath` option:
 
@@ -161,8 +161,11 @@ NOTE: at this time, this plugin does not support setting a path to `privateKeyPa
 
 ## Running Tests
 
-1. `npm install`
-2. `npm test`
+* yarn test
+
+## Why `ember build` and `ember test` don't work
+
+Since this is a node-only ember-cli addon, this package does not include many files and dependencies which are part of ember-cli's typical `ember build` and `ember test` processes.
 
 ## Thanks to:
 
