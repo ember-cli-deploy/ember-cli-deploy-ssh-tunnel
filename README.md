@@ -159,6 +159,33 @@ ENV['ssh-tunnel'] = {
 
 NOTE: at this time, this plugin does not support setting a path to `privateKeyPath` to a key that has been encrypted with a password.
 
+## Using `ember-cli-deploy-ssh-tunnel` with "bastion" servers
+
+`ember-cli-deploy-ssh-tunnel` is commonly used to open a tunnel on a "bastion" server in order to access services behind a firewall. A discussion of the problem is available on the README for the [`ember-cli-deploy-redis`](https://github.com/ember-cli-deploy/ember-cli-deploy-redis#what-if-my-redis-server-isnt-publicly-accessible) plugin.
+
+### Example: AWS ElastiCache & EC2
+One of the common use cases for `ember-cli-deploy-ssh-tunnel` is need to connect to ElastiCache that is accessible only from EC2 instance. To deploy your `index.html` to ElastiCache you need:
+* username and host you can SSH into your EC2 instance (e.g. `deploy@my-ec2-instance.amazon.com`)
+* host and port of your ElastiCache that is accessible from this EC2 instance (e.g. `my-elasticache-instance.amazon.com:6379`)
+
+First, you should confirm that ssh tunneling actually works on your localhost, try:
+
+```
+$ ssh -f -N -L6379:my-elasticache-instance.amazon.com:6379 deploy@my-ec2-instance.amazon.com
+$ redis-cli
+```
+
+You should be able to see Redis CLI connected to your ElastiCache instance.
+
+If it works, set following configuration in `ssh-tunnel`:
+
+1. Set `host` to your EC2 instance (e.g. `my-ec2-instance.amazon.com`)
+2. Set `username` to your EC2 user (e.g. `deploy`)
+3. Set `dstHost` to your ElastiCache instance (e.g. `my-elasticache-instance.amazon.com`)
+4. Set `dstPort` to your ElastiCache port (e.g. `6379`)
+
+In `redis` config leave `host` and `port` as default - thanks to ssh tunneling your `localhost:6379` will point to `my-elasticache-instance.amazon.com:6379` via `my-ec2-instance.amazon.com`.
+
 ## Running Tests
 
 * yarn test
