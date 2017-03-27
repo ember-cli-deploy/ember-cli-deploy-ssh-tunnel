@@ -159,7 +159,11 @@ ENV['ssh-tunnel'] = {
 
 NOTE: at this time, this plugin does not support setting a path to `privateKeyPath` to a key that has been encrypted with a password.
 
-## AWS ElastiCache & EC2 Example
+## Using `ember-cli-deploy-ssh-tunnel` with "bastion" servers
+
+`ember-cli-deploy-ssh-tunnel` is commonly used to open a tunnel on a "bastion" server in order to access services behind a firewall. A discussion of the problem is available on the README for the [`ember-cli-deploy-redis`](https://github.com/ember-cli-deploy/ember-cli-deploy-redis#what-if-my-redis-server-isnt-publicly-accessible) plugin.
+
+### Example: AWS ElastiCache & EC2
 One of the common use cases for `ember-cli-deploy-ssh-tunnel` is need to connect to ElastiCache that is accessible only from EC2 instance. To deploy your `index.html` to ElastiCache you need:
 * username and host you can SSH into your EC2 instance (e.g. `deploy@my-ec2-instance.amazon.com`)
 * host and port of your ElastiCache that is accessible from this EC2 instance (e.g. `my-elasticache-instance.amazon.com:6379`)
