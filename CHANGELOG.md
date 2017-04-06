@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/v1.0.0) (2017-04-06)
+[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v1.0.0-beta.0...v1.0.0)
+
+**Merged pull requests:**
+
+- \[DOC\] add ec2 & elasticache example usecase [\#7](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/pull/7) ([jniechcial](https://github.com/jniechcial))
+
 ## [v1.0.0-beta.0](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/v1.0.0-beta.0) (2017-03-25)
 [Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v0.2.2...v1.0.0-beta.0)
 
