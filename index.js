@@ -1,39 +1,47 @@
 'use strict';
 
-var RSVP = require('rsvp');
-var fs = require('fs');
-var { createTunnel } = require('tunnel-ssh');
-var untildify = require('untildify');
+const RSVP = require('rsvp');
+const fs = require('fs');
+const { createTunnel } = require('tunnel-ssh');
+const untildify = require('untildify');
 
-var DeployPluginBase = require('ember-cli-deploy-plugin');
+const DeployPluginBase = require('ember-cli-deploy-plugin');
 
-var MAX_PORT_NUMBER = 65535;
-var MIN_PORT_NUMBER = 49151;
+const MAX_PORT_NUMBER = 65535;
+const MIN_PORT_NUMBER = 49151;
 
 module.exports = {
   name: 'ember-cli-deploy-ssh-tunnel',
 
-  
-  createDeployPlugin: function(options) {
-    var DeployPlugin = DeployPluginBase.extend({
+  createDeployPlugin: function (options) {
+    const DeployPlugin = DeployPluginBase.extend({
       name: options.name,
       defaultConfig: {
-          dstPort: 6379,
-          port: 22,
-          dstHost: 'localhost',
-          srcPort: function() {
-            var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
-            return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
-          },
+        dstPort: 6379,
+        port: 22,
+        dstHost: 'localhost',
+        srcPort: function () {
+          var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
+          return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
+        }
       },
 
       requiredConfig: ['host', 'username'],
 
-      setup: function(/* context */) {
-        var srcPort = this.readConfig('srcPort');
+      setup: function (/* context */) {
+        const srcPort = this.readConfig('srcPort');
 
         if (srcPort > MAX_PORT_NUMBER || srcPort < MIN_PORT_NUMBER) {
-          throw 'Port ' + srcPort + ' is not available to open a SSH connection on.\n' + 'Please choose a port between ' + MIN_PORT_NUMBER + ' and ' + MAX_PORT_NUMBER + '.';
+          throw (
+            'Port ' +
+            srcPort +
+            ' is not available to open a SSH connection on.\n' +
+            'Please choose a port between ' +
+            MIN_PORT_NUMBER +
+            ' and ' +
+            MAX_PORT_NUMBER +
+            '.'
+          );
         }
 
         const tunnelOptions = {
@@ -44,11 +52,19 @@ module.exports = {
           port: srcPort
         };
 
+        let privateKey = this.readConfig('privateKey');
+
+        if (this.readConfig('privateKeyPath')) {
+          privateKey = fs.readFileSync(untildify(this.readConfig('privateKeyPath')));
+        }
+
         const sshOptions = {
           host: this.readConfig('host'),
           port: this.readConfig('port'),
           username: this.readConfig('username'),
-          privateKey: fs.readFileSync(untildify(this.readConfig('privateKeyPath')))
+          password: this.readConfig('password'),
+          privateKey,
+          passphrase: this.readConfig('passphrase')
         };
 
         const forwardOptions = {
@@ -58,9 +74,9 @@ module.exports = {
           dstPort: this.readConfig('dstPort')
         };
 
-        return new RSVP.Promise(function(resolve, reject) {
+        return new RSVP.Promise(function (resolve, reject) {
           createTunnel(tunnelOptions, serverOptions, sshOptions, forwardOptions)
-            .then(([server, conn]) => {
+            .then(([server]) => {
               resolve({
                 tunnel: {
                   handler: server,
@@ -74,7 +90,7 @@ module.exports = {
         });
       },
 
-      teardown: function(context) {
+      teardown: function (context) {
         context.tunnel.handler.close();
       }
     });
