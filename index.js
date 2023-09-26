@@ -23,6 +23,17 @@ module.exports = {
         srcPort: function () {
           var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
           return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
+        },
+        tunnelClient: function (context) {
+          // if you want to provide your own ssh client to be used instead of one from this plugin,
+          // must follow this signature 
+          // createTunnel(
+          //   tunnelOptions: TunnelOptions,
+          //   serverOptions: ServerOptions,
+          //   sshOptions: SshOptions,
+          //   forwardOptions: ForwardOptions
+          // ): Promise<[Server, Client]>;
+          return context.tunnelClient || createTunnel;
         }
       },
 
@@ -44,6 +55,14 @@ module.exports = {
           );
         }
 
+        const tunnel = this.readConfig('tunnelClient');
+
+        let privateKey = this.readConfig('privateKey');
+
+        if (this.readConfig('privateKeyPath')) {
+          privateKey = fs.readFileSync(untildify(this.readConfig('privateKeyPath')));
+        }
+
         const tunnelOptions = {
           autoClose: true
         };
@@ -51,12 +70,6 @@ module.exports = {
         const serverOptions = {
           port: srcPort
         };
-
-        let privateKey = this.readConfig('privateKey');
-
-        if (this.readConfig('privateKeyPath')) {
-          privateKey = fs.readFileSync(untildify(this.readConfig('privateKeyPath')));
-        }
 
         const sshOptions = {
           host: this.readConfig('host'),
@@ -75,7 +88,7 @@ module.exports = {
         };
 
         return new RSVP.Promise(function (resolve, reject) {
-          createTunnel(tunnelOptions, serverOptions, sshOptions, forwardOptions)
+          tunnel(tunnelOptions, serverOptions, sshOptions, forwardOptions)
             .then(([server]) => {
               resolve({
                 tunnel: {
