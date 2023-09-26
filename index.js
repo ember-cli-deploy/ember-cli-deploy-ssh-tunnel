@@ -33,6 +33,7 @@ module.exports = {
           //   sshOptions: SshOptions,
           //   forwardOptions: ForwardOptions
           // ): Promise<[Server, Client]>;
+          // https://github.com/agebrock/tunnel-ssh/blob/master/types/index.d.ts
           return context.tunnelClient || createTunnel;
         }
       },
