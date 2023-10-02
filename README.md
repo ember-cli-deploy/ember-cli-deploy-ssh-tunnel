@@ -2,8 +2,6 @@
 
 > An ember-cli-deploy plugin to open an ssh tunnel during your deploy
 
-[![Circle CI](https://circleci.com/gh/ghedamat/ember-cli-deploy-ssh-tunnel/tree/master.svg?style=shield)](https://circleci.com/gh/ghedamat/ember-cli-deploy-ssh-tunnel/tree/master)
-
 [![](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-ssh-tunnel.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
 
 This plugins opens an ssh tunnel forwarding a port to the host you specify to one of your local ports.
