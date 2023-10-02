@@ -67,16 +67,16 @@ describe('ssh-tunnel plugin', function() {
         });
       });
 
-      it('raises about missing required config', function() {
+      it('raises about missing required config', async function() {
         config = {};
         context = {
           ui: mockUi,
           config: config
         };
         plugin.beforeHook(context);
-        assert.throws(function(){
+        await assert.throws(function(){
           plugin.configure(context);
-        });
+        }, /Missing required/);
         var messages = mockUi.messages.reduce(function(previous, current) {
           if (/- Missing required config:\s.*/.test(current)) {
             previous.push(current);

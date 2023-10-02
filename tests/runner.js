@@ -23,6 +23,7 @@ if (arg === 'all') {
 
 mocha.run(function(failures) {
   process.on('exit', function() {
+    // eslint-disable-next-line no-process-exit -- this sets the unix return code for the process
     process.exit(failures);
   });
 });
