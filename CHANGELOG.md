@@ -1,5 +1,18 @@
 # Change Log
 
+
+## v2.0.0 (2023-10-02)
+
+#### :boom: Breaking Change
+* [#12](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/pull/12) [BREAKING] Update CI, dependencies & release process, require node >= 14 ([@lukemelia](https://github.com/lukemelia))
+
+#### :rocket: Enhancement
+* [#11](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/pull/11) Update tunnel ssh ([@evoactivity](https://github.com/evoactivity))
+
+#### Committers: 2
+- Liam Potter ([@evoactivity](https://github.com/evoactivity))
+- Luke Melia ([@lukemelia](https://github.com/lukemelia))
+
 ## [v1.0.0](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/tree/v1.0.0) (2017-04-06)
 [Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel/compare/v1.0.0-beta.0...v1.0.0)
 
