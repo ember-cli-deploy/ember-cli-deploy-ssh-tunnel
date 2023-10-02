@@ -1,80 +1,110 @@
 'use strict';
 
-var RSVP = require('rsvp');
-var fs = require('fs');
-var tunnelSsh = require('tunnel-ssh');
-var untildify = require('untildify');
+const RSVP = require('rsvp');
+const fs = require('fs');
+const { createTunnel } = require('tunnel-ssh');
+const untildify = require('untildify');
 
-var DeployPluginBase = require('ember-cli-deploy-plugin');
+const DeployPluginBase = require('ember-cli-deploy-plugin');
 
-var MAX_PORT_NUMBER = 65535;
-var MIN_PORT_NUMBER = 49151;
+const MAX_PORT_NUMBER = 65535;
+const MIN_PORT_NUMBER = 49151;
 
 module.exports = {
   name: 'ember-cli-deploy-ssh-tunnel',
 
-  createDeployPlugin: function(options) {
-    var DeployPlugin = DeployPluginBase.extend({
+  createDeployPlugin: function (options) {
+    const DeployPlugin = DeployPluginBase.extend({
       name: options.name,
       defaultConfig: {
-          dstPort: 6379,
-          port: 22,
-          dstHost: 'localhost',
-          srcPort: function() {
-            var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
-            return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
-          },
-          tunnelClient: function(context) {
-            // if you want to provide your own ssh client to be used instead of one from this plugin
-            return context.tunnelClient || tunnelSsh;
-          }
+        dstPort: 6379,
+        port: 22,
+        dstHost: 'localhost',
+        srcPort: function () {
+          var range = MAX_PORT_NUMBER - MIN_PORT_NUMBER + 1;
+          return Math.floor(Math.random() * range) + MIN_PORT_NUMBER;
+        },
+        tunnelClient: function (context) {
+          // if you want to provide your own ssh client to be used instead of one from this plugin,
+          // must follow this signature 
+          // createTunnel(
+          //   tunnelOptions: TunnelOptions,
+          //   serverOptions: ServerOptions,
+          //   sshOptions: SshOptions,
+          //   forwardOptions: ForwardOptions
+          // ): Promise<[Server, Client]>;
+          // https://github.com/agebrock/tunnel-ssh/blob/master/types/index.d.ts
+          return context.tunnelClient || createTunnel;
+        }
       },
 
       requiredConfig: ['host', 'username'],
 
-      setup: function(/* context */) {
-        var srcPort = this.readConfig('srcPort');
+      setup: function (/* context */) {
+        const srcPort = this.readConfig('srcPort');
 
         if (srcPort > MAX_PORT_NUMBER || srcPort < MIN_PORT_NUMBER) {
-          throw 'Port ' + srcPort + ' is not available to open a SSH connection on.\n' + 'Please choose a port between ' + MIN_PORT_NUMBER + ' and ' + MAX_PORT_NUMBER + '.';
+          throw (
+            'Port ' +
+            srcPort +
+            ' is not available to open a SSH connection on.\n' +
+            'Please choose a port between ' +
+            MIN_PORT_NUMBER +
+            ' and ' +
+            MAX_PORT_NUMBER +
+            '.'
+          );
         }
 
-        var sshConfig = {
-          host: this.readConfig('host'),
-          port: this.readConfig('port'),
-          dstPort: this.readConfig('dstPort'),
-          dstHost: this.readConfig('dstHost'),
-          username: this.readConfig('username'),
-          localPort: srcPort
+        const tunnel = this.readConfig('tunnelClient');
+
+        let privateKey = this.readConfig('privateKey');
+
+        if (this.readConfig('privateKeyPath')) {
+          privateKey = fs.readFileSync(untildify(this.readConfig('privateKeyPath')));
+        }
+
+        const tunnelOptions = {
+          autoClose: true
         };
 
-        var password = this.readConfig('password');
-        var privateKey = this.readConfig('privateKeyPath');
-        var tunnel = this.readConfig('tunnelClient');
+        const serverOptions = {
+          port: srcPort
+        };
 
-        if (password) {
-          sshConfig.password = password;
-        } else if (privateKey) {
-          sshConfig.privateKey = fs.readFileSync(untildify(privateKey));
-        }
+        const sshOptions = {
+          host: this.readConfig('host'),
+          port: this.readConfig('port'),
+          username: this.readConfig('username'),
+          password: this.readConfig('password'),
+          privateKey,
+          passphrase: this.readConfig('passphrase')
+        };
 
-        return new RSVP.Promise(function(resolve, reject) {
-          var sshTunnel = tunnel(sshConfig, function(error /*, result */) {
-            if (error) {
-              reject(error);
-            } else {
+        const forwardOptions = {
+          srcAddr: 'localhost',
+          srcPort: this.readConfig('srcPort'),
+          dstAddr: this.readConfig('dstHost'),
+          dstPort: this.readConfig('dstPort')
+        };
+
+        return new RSVP.Promise(function (resolve, reject) {
+          tunnel(tunnelOptions, serverOptions, sshOptions, forwardOptions)
+            .then(([server]) => {
               resolve({
                 tunnel: {
-                  handler: sshTunnel,
+                  handler: server,
                   srcPort: srcPort
                 }
               });
-            }
-          });
+            })
+            .catch((error) => {
+              reject(error);
+            });
         });
       },
 
-      teardown: function(context) {
+      teardown: function (context) {
         context.tunnel.handler.close();
       }
     });
